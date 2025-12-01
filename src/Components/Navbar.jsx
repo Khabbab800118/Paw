@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
   const links = (
@@ -52,9 +52,9 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end">
-          <button className="btn text-xl bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+          <Link to="/login" className="btn text-xl bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
             Log In
-          </button>
+          </Link>
         </div>
       </div>
     </div>
