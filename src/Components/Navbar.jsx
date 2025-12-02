@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../Provider/AuthContext";
 
 const Navbar = () => {
+  const { user, logoutUser } = useContext(AuthContext);
+
   const links = (
     <div className="space-x-3">
       <NavLink className="font-semibold" to="/">
@@ -15,6 +18,17 @@ const Navbar = () => {
       </NavLink>
     </div>
   );
+
+  const handleLogOut = () => {
+    logoutUser()
+      .then(() => {
+        alert("logout success");
+      })
+      .catch((err) => {
+        const errorMessage = err.message;
+        alert(errorMessage);
+      });
+  };
   return (
     <div className=" bg-base-100 shadow-sm">
       <div className="navbar max-w-7xl mx-auto py-5">
@@ -44,7 +58,7 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+          <a className="btn btn-ghost text-xl bg-linear-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
             WarmPaw
           </a>
         </div>
@@ -52,9 +66,22 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end">
-          <Link to="/login" className="btn text-xl bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-            Log In
-          </Link>
+          {user ? (
+            <button
+              onClick={handleLogOut}
+              to="/"
+              className="btn text-xl bg-linear-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent"
+            >
+              Log Out
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="btn text-xl bg-linear-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent"
+            >
+              Log In
+            </Link>
+          )}
         </div>
       </div>
     </div>

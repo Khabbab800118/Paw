@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../Provider/AuthContext";
+import { updateProfile } from "firebase/auth";
+import auth from "../Firebase/firbase.config";
 
 const Register = () => {
-  const { createUser, googleSignIn } = useContext(AuthContext);
+  const { createUser, googleSignIn, setUser } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,19 +16,26 @@ const Register = () => {
     const password = form.password.value;
     createUser(email, password)
       .then((userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        if (user) {
-          alert("registration success");
-        }
-        // ...
+        updateProfile(auth.currentUser, {
+          displayName: "Jane Q. User",
+          photoURL: "https://example.com/jane-q-user/profile.jpg",
+        })
+          .then(() => {
+            setUser(userCredential.user);
+            alert("Registration success")
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            if (error) {
+              alert(errorMessage);
+            }
+          });
       })
       .catch((error) => {
         const errorMessage = error.message;
         if (error) {
           alert(errorMessage);
         }
-        // ..
       });
   };
   const handleGoogleSignIn = () => {
@@ -83,7 +92,7 @@ const Register = () => {
             <small>
               Don't Have An Account?{" "}
               <Link
-                className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent"
+                className="bg-linear-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent"
                 to="/login"
               >
                 Log In
